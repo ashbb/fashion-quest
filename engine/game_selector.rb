@@ -6,8 +6,7 @@ def game_selector(app, app_base_path)
 
   stack :align => 'center' do
 
-    flow do
-      style(:margin_left => '20')
+    flow margin_left: 20 do
       image "engine/fashion_quest_logo.png"
     end
 
@@ -22,14 +21,12 @@ def game_selector(app, app_base_path)
 
     end
 
-    text       = para message
-    text.margin_left = '95'
+    text = para message, margin_left: 95
 
     flow do
-      style(:margin_left => '25')
 
       if !game
-        game_select = list_box :items => game_directories
+        game_select = list_box items: game_directories, margin_left: 25
       end
 
       btn = button 'OK' do

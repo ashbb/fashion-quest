@@ -1,3 +1,6 @@
+require 'green_shoes'
+$: << '.'
+
 require 'engine/setup.rb'
 
 Shoes.app(
@@ -17,6 +20,7 @@ Shoes.app(
       :resizable => config['resizable']
     ) {
 
+      $app = self
       # Close game selector
       game_selector_window.close
 
@@ -29,10 +33,12 @@ Shoes.app(
         :width => config['width'],
         :height => config['image_height']
 
+
       # Initialize output area
-      @output_stack = stack :scroll => true,
-        :width => config['width'],
-        :height => (config['height'] - config['image_height'])
+      @output_stack = stack top: 200, width: 600, height: 400, scroll: true do
+        $msg = para 'dummy ' * 1000
+        flush
+      end
 
       # Initialize game
       @game = Game.new(config, app_base_path, game_path)

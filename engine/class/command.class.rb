@@ -253,7 +253,7 @@ class Command
       # Show image, if any
       if FileTest.exists?(image_file)
         @image_stack.height = @game.config['image_height']
-        @image_stack.clear { @image_stack.image image_file }
+        @image_stack.clear { $app.image image_file }
         @output_stack.height = (@game.config['height'] - @game.config['image_height'])
       else
         @image_stack.height = 0

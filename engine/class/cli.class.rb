@@ -1,4 +1,4 @@
-error('loaded cli')
+p 'loaded cli'
 
 class Cli
 
@@ -135,31 +135,31 @@ class Cli
 
   # the flow of this function seems weird
   def keystroke(k)
-
-    # add keystroke to input if it's not a special character
-    if k.class != Symbol and k != "\n"
-      @input_text << k
-    end
+    case
 
     # allow user to backspace
-    if k == :backspace
+    when(k == 'BackSpace')
       @input_text = (@input_text.length > 1) ? @input_text[0..-2] : ''
-    end
-
+    
     # allow user to cycle back in command history
-    if k == :up and @command_index > 0
+    when(k == 'Up' and @command_index > 0)
       @command_index = @command_index - 1
       @input_text = @command_history[@command_index]
-    end
-
+    
     # allow user to cycle forward in command history
-    if k == :down and @command_index < @command_history.size
+    when(k == 'Down' and @command_index < @command_history.size)
       @command_index = @command_index + 1
       if @command_index == @command_history.size
         @input_text = ''
       else
         @input_text = @command_history[@command_index]
       end
+
+    # add keystroke to input if it's not a special character
+    when(k.class != Symbol and k != "\n")
+      @input_text << k
+
+    else
     end
 
     # update display prompt
@@ -385,20 +385,9 @@ class Cli
   end
 
   def output(output_text, input_text = '')
-
     # display output text, emphasize any messages, and show prompt
-    @output_stack.clear {
-      @output_stack.para \
-        output_text,
-        @output_stack.em(@message_text),
-        input_text,
-        :font => 'Verdana 11px',
-        :stroke => '#120E03',
-        :margin_left => 10,
-        :margin_right => 10
-    }
-    @output_stack.scroll_top = @output_stack.scroll_max
-
+    $msg.text = output_text + $app.em(@message_text) + input_text + "\n" * 10
+    @output_stack.swin.vscrollbar.value = $msg.height > 650 ? $msg.height - 650 : 0
   end
 
   def output_add(text, add_newline = true)
